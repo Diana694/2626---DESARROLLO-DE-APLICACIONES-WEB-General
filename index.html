@@ -5,84 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panadería Aquí Me Voy</title>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    
-    <style>
-        :root {
-            --primary-color: #8B4513; /* Marrón cálido para panadería */
-            --accent-color: #D2691E;  /* Color chocolate/tostado */
-            --light-bg: #FFF8DC;      /* Fondo crema suave */
-            --custom-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fdfbf7;
-            color: #4a3b32;
-            scroll-behavior: smooth;
-        }
-
-        /* Hero Section personalizado */
-        .hero-section {
-            background: linear-gradient(135deg, #8B4513 0%, #5c2c0a 100%);
-            color: #fff;
-            padding: 80px 0;
-        }
-
-        /* Tarjetas de productos personalizadas */
-        .card-custom {
-            border: none;
-            border-radius: 12px;
-            box-shadow: var(--custom-shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            background-color: #ffffff;
-        }
-
-        .card-custom:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.15);
-        }
-
-        /* Estilo para el panel lateral Aside */
-        .aside-panel {
-            background-color: var(--light-bg);
-            border-left: 5px solid var(--primary-color);
-            border-radius: 0 10px 10px 0;
-        }
-
-        /* Ajuste responsivo para el contenedor de video */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 12px;
-            box-shadow: var(--custom-shadow);
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Media Query obligatoria para optimización en pantallas pequeñas */
-        @media (max-width: 768px) {
-            .hero-section {
-                padding: 50px 0;
-                text-align: center;
-            }
-            .aside-panel {
-                border-left: none;
-                border-top: 5px solid var(--primary-color);
-                border-radius: 0 0 10px 10px;
-                margin-top: 2rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -107,7 +31,6 @@
     </header>
 
     <main>
-
         <section id="inicio" class="hero-section text-center text-md-start">
             <div class="container">
                 <div class="row align-items-center">
@@ -116,7 +39,7 @@
                         <p class="lead mb-4 fs-3 text-warning italic">El sabor tradicional en cada bocado.</p>
                         <article>
                             <p class="mb-4 fs-5">
-                                Bienvenidos a la Panadería Aquí Me Voy, un space donde elaboramos
+                                Bienvenidos a la Panadería Aquí Me Voy, un espacio donde elaboramos
                                 diariamente panes de dulce y de sal, tortas húmedas y deliciosas tartas.
                                 Nuestro compromiso es ofrecer productos frescos, preparados con ingredientes
                                 de calidad y recetas tradicionales que brindan una experiencia única a nuestros clientes.
@@ -241,14 +164,17 @@
 
                         <div class="card card-custom p-4">
                             <h4 class="mb-3 fw-bold h5 text-secondary">Registra tu Pedido Especial</h4>
-                            <form id="formPedido">
+                            <form id="formPedido" novalidate>
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label for="nombreCliente" class="form-label fw-medium">Nombre del Cliente</label>
+                                        <label for="nombreCliente" class="form-label fw-medium">Nombre del Cliente *</label>
                                         <input type="text" class="form-control" id="nombreCliente" placeholder="Tu nombre completo">
+                                        <div class="invalid-feedback">
+                                            El nombre es requerido y debe tener un mínimo de 5 letras.
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="tipoProducto" class="form-label fw-medium">Tipo de Producto</label>
+                                        <label for="tipoProducto" class="form-label fw-medium">Tipo de Producto *</label>
                                         <select class="form-select" id="tipoProducto">
                                             <option value="">Seleccione una opción...</option>
                                             <option value="Panes de Dulce">Panes de Dulce 🍩</option>
@@ -257,10 +183,16 @@
                                             <option value="Tartas de Frutas">Tartas de Frutas 🥧</option>
                                             <option value="Postres Personalizados">Postres Personalizados 🎂</option>
                                         </select>
+                                        <div class="invalid-feedback">
+                                            Por favor, elija un tipo de producto de la lista.
+                                        </div>
                                     </div>
                                     <div class="col-12">
-                                        <label for="detallesPedido" class="form-label fw-medium">Detalles o Descripción del Pedido</label>
-                                        <textarea class="form-control" id="detallesPedido" rows="4" placeholder="Especifica cantidades, sabores, decoraciones..."></textarea>
+                                        <label for="detallesPedido" class="form-label fw-medium">Detalles o Descripción del Pedido *</label>
+                                        <textarea class="form-control" id="detallesPedido" rows="4" placeholder="Especifica sabores, cantidades o decoraciones... Mínimo 15 caracteres."></textarea>
+                                        <div class="invalid-feedback">
+                                            Debes ingresar una descripción detallada (mínimo 15 caracteres).
+                                        </div>
                                     </div>
                                     <div class="col-12 text-end">
                                         <button type="submit" class="btn btn-warning px-4 fw-semibold text-dark">Registrar Pedido</button>
@@ -281,26 +213,24 @@
 
                     <section class="mb-5">
                         <h2 class="fw-bold mb-4 pb-2 border-bottom" style="color: var(--primary-color);">Video de Referencia</h2>
-                        
                         <div class="alert alert-warning text-center mb-3 p-2 small" role="alert">
                             ¿No carga el reproductor integrado? 
                             <a href="https://youtu.be/_om7--IxCIY" target="_blank" class="fw-bold text-dark text-decoration-underline">
                                 Haz clic aquí para ver el video directamente en YouTube ↗
                             </a>
                         </div>
-
                         <div class="video-container">
                             <iframe src="https://www.youtube.com/embed/_om7--IxCIY" title="Proceso de elaboración cinematográfico del pan" allowfullscreen></iframe>
                         </div>
                     </section>
 
-                </div> <aside class="col-lg-4">
+                </div> 
+                
+                <aside class="col-lg-4">
                     <div class="aside-panel p-4 shadow-sm sticky-top" style="top: 85px; z-index: 10;">
                         <h3 class="fw-bold h4 mb-3" style="color: var(--primary-color);">Información adicional</h3>
-                        
                         <p class="mb-1 fw-bold text-dark">📅 Horario de atención:</p>
                         <p class="text-muted small mb-4">Lunes a sábado de 06:00 a 20:00.</p>
-                        
                         <div class="p-3 rounded-3 bg-white border border-warning shadow-sm">
                             <p class="mb-1 fw-bold text-danger">✨ Promoción especial:</p>
                             <p class="small mb-0 text-dark">Compra una torta húmeda y recibe un 10 % de descuento en tu próxima compra.</p>
@@ -310,7 +240,6 @@
 
             </div>
         </div>
-
     </main>
 
     <footer class="bg-dark text-white pt-4 pb-3 mt-5">

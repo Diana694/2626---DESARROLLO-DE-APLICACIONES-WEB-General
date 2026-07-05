@@ -1,49 +1,120 @@
 // ==========================================
-// 1. SELECCIÓN DE ELEMENTOS DEL DOM (IDs)
+// 1. SELECCIÓN DE ELEMENTOS DEL DOM
 // ==========================================
 const formPedido = document.getElementById('formPedido');
+const inputNombre = document.getElementById('nombreCliente');
+const selectProducto = document.getElementById('tipoProducto');
+const txtDetalles = document.getElementById('detallesPedido');
+
 const listaRegistros = document.getElementById('listaRegistros');
 const totalRegistros = document.getElementById('totalRegistros');
 const mensajeAlerta = document.getElementById('mensajeAlerta');
 
-// Variable global interna para asignar identificadores únicos a cada registro
+// Variable incremental única para el control interno de IDs de nodos del DOM
 let idContadorUnico = 0;
 
 // ==========================================
-// 2. MANEJO DEL EVENTO SUBMIT (addEventListener)
+// 2. LOGICA DE VALIDACIONES INDIVIDUALES (Semana 6)
+// ==========================================
+
+// Evalúa el nombre (Mínimo 5 caracteres)
+const validarNombre = () => {
+    const valor = inputNombre.value.trim();
+    if (valor === "" || valor.length < 5) {
+        marcarInvalido(inputNombre);
+        return false;
+    } else {
+        marcarValido(inputNombre);
+        return true;
+    }
+};
+
+// Evalúa la selección de un producto
+const validarProducto = () => {
+    if (selectProducto.value === "") {
+        marcarInvalido(selectProducto);
+        return false;
+    } else {
+        marcarValido(selectProducto);
+        return true;
+    }
+};
+
+// Evalúa los detalles descriptivos (Mínimo 15 caracteres)
+const validarDetalles = () => {
+    const valor = txtDetalles.value.trim();
+    if (valor === "" || valor.length < 15) {
+        marcarInvalido(txtDetalles);
+        return false;
+    } else {
+        marcarValido(txtDetalles);
+        return true;
+    }
+};
+
+// Manejadores auxiliares de clases visuales nativas de Bootstrap 5
+const marcarInvalido = (elemento) => {
+    elemento.classList.remove("is-valid");
+    elemento.classList.add("is-invalid");
+};
+
+const marcarValido = (elemento) => {
+    elemento.classList.remove("is-invalid");
+    elemento.classList.add("is-valid");
+};
+
+const removerEstilosValidacion = (elemento) => {
+    elemento.classList.remove("is-invalid", "is-valid");
+};
+
+// ==========================================
+// 3. ASIGNACIÓN DE ESCUCHADORES EN TIEMPO REAL
+// ==========================================
+inputNombre.addEventListener('input', validarNombre);
+inputNombre.addEventListener('blur', validarNombre);
+
+selectProducto.addEventListener('change', validarProducto);
+selectProducto.addEventListener('blur', validarProducto);
+
+txtDetalles.addEventListener('input', validarDetalles);
+txtDetalles.addEventListener('blur', validarDetalles);
+
+// ==========================================
+// 4. MANEJO DE ENVÍO DEL FORMULARIO (submit)
 // ==========================================
 formPedido.addEventListener('submit', function (event) {
-    // Evita la recarga predeterminada del navegador
+    // Frena el comportamiento de refresco por defecto del navegador
     event.preventDefault();
 
-    // Captura y remoción de espacios en blanco redundantes
-    const cliente = document.getElementById('nombreCliente').value.trim();
-    const tipo = document.getElementById('tipoProducto').value;
-    const detalles = document.getElementById('detallesPedido').value.trim();
+    // Invoca todas las validaciones de manera simultánea
+    const esNombreCorrecto = validarNombre();
+    const esProductoCorrecto = validarProducto();
+    const esDetalleCorrecto = validarDetalles();
 
-    // ==========================================
-    // 3. VALIDACIÓN DE CAMPOS Y MENSAJES DINÁMICOS
-    // ==========================================
-    if (cliente === '' || tipo === '' || detalles === '') {
-        mostrarMensajeValidacion('Error: Todos los campos del formulario son obligatorios para procesar el pedido.', 'danger');
-        return; // Rompe el flujo si la validación falla
+    // Bloquea el guardado en caso de que alguna validación no sea exitosa
+    if (!esNombreCorrecto || !esProductoCorrecto || !esDetalleCorrecto) {
+        mostrarMensajeValidacion('Error: Por favor complete los campos obligatorios marcados en color rojo.', 'danger');
+        return;
     }
 
-    // Mensaje dinámico de éxito si pasa la validación
-    mostrarMensajeValidacion('¡Excelente! El pedido ha sido guardado exitosamente.', 'success');
+    // Captura final de datos limpios
+    const cliente = inputNombre.value.trim();
+    const tipo = selectProducto.value;
+    const detalles = txtDetalles.value.trim();
 
-    // Incrementar ID para el manejo interno del DOM
+    // Emisión del mensaje de éxito
+    mostrarMensajeValidacion('¡Excelente! El pedido especial ha sido verificado y procesado con éxito.', 'success');
+
+    // Aumento del id único incremental
     idContadorUnico++;
 
     // ==========================================
-    // 4. CREACIÓN DINÁMICA DE ELEMENTOS (createElement)
+    // 5. CONSTRUCCIÓN E INSERCIÓN DINÁMICA DE TARJETAS
     // ==========================================
-    // Tarjeta responsiva utilizando el sistema de rejillas (Grid) de Bootstrap
     const colDiv = document.createElement('div');
     colDiv.className = 'col-12 col-md-6 col-xl-4';
     colDiv.setAttribute('id', `pedido-${idContadorUnico}`);
 
-    // Inyección de estructura HTML interna respetando las clases personalizadas y de Bootstrap
     colDiv.innerHTML = `
         <div class="card h-100 border-start border-3 border-warning shadow-sm" style="background-color: #ffffff;">
             <div class="card-body d-flex flex-column p-4">
@@ -59,41 +130,38 @@ formPedido.addEventListener('submit', function (event) {
         </div>
     `;
 
-    // ==========================================
-    // 5. MANEJO DE EVENTO PARA ELIMINAR REGISTROS
-    // ==========================================
+    // Asignación de evento directa al botón interno para remover el registro
     const botonEliminar = colDiv.querySelector('.btn-eliminar');
     botonEliminar.addEventListener('click', function () {
-        // Elimina el nodo del DOM de forma directa
-        colDiv.remove();
-        // Disminuye el recuento en la pantalla
-        modificarContadorDisplay(-1);
+        colDiv.remove(); // Borra el nodo específico de forma directa
+        modificarContadorDisplay(-1); // Reduce el indicador numérico
     });
 
-    // ==========================================
-    // 6. INCORPORACIÓN AL DOM (appendChild)
-    // ==========================================
+    // Añade la tarjeta al listado visual mediante appendChild
     listaRegistros.appendChild(colDiv);
 
-    // Actualiza la interfaz e incrementa el contador general
+    // Incrementa la cantidad de registros en pantalla
     modificarContadorDisplay(1);
 
-    // Limpieza completa del formulario para nuevos registros
+    // Resetea el formulario por completo y remueve los bordes verdes sobrantes
     formPedido.reset();
+    removerEstilosValidacion(inputNombre);
+    removerEstilosValidacion(selectProducto);
+    removerEstilosValidacion(txtDetalles);
 });
 
 // ==========================================
 // FUNCIONES AUXILIARES / MODULARES
 // ==========================================
 
-// Modifica y renderiza el total de registros en pantalla
+// Modifica y refresca el contador en pantalla
 function modificarContadorDisplay(valor) {
     let cuentaActual = parseInt(totalRegistros.textContent);
     cuentaActual += valor;
     totalRegistros.textContent = cuentaActual;
 }
 
-// Genera alertas dinámicas usando componentes estáticos de Bootstrap
+// Genera e inyecta alertas transitorias en la interfaz
 function mostrarMensajeValidacion(mensaje, estiloBootstrap) {
     mensajeAlerta.innerHTML = `
         <div class="alert alert-${estiloBootstrap} alert-dismissible fade show shadow-sm" role="alert">
@@ -102,7 +170,7 @@ function mostrarMensajeValidacion(mensaje, estiloBootstrap) {
         </div>
     `;
 
-    // Auto-cierre de la alerta transcurridos 4 segundos para mejorar la experiencia de usuario
+    // Cierre automatizado de alertas a los 4 segundos
     setTimeout(() => {
         mensajeAlerta.innerHTML = '';
     }, 4000);
