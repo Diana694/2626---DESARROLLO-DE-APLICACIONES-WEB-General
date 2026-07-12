@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panadería Aquí Me Voy</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
+    <!-- INICIO: BLOQUE HEADER (Posteriormente header.html) -->
     <header class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
             <div class="container">
                 <a class="navbar-brand fw-bold text-warning" href="#">🍞 Panadería Aquí Me Voy</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto fw-medium">
                         <li class="nav-item"><a class="nav-link active" href="#inicio">Inicio</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#quienes-somos">Quiénes Somos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#productos">Productos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
                     </ul>
@@ -29,240 +27,67 @@
             </div>
         </nav>
     </header>
+    <!-- FIN: BLOQUE HEADER -->
 
+    <!-- INICIO: BLOQUE CONTENIDO PRINCIPAL (Posteriormente index.html con template blocks) -->
     <main>
         <section id="inicio" class="hero-section text-center text-md-start">
             <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-7">
-                        <h1 class="display-4 fw-bold mb-3">Panadería Aquí Me Voy</h1>
-                        <p class="lead mb-4 fs-3 text-warning italic">El sabor tradicional en cada bocado.</p>
-                        <article>
-                            <p class="mb-4 fs-5">
-                                Bienvenidos a la Panadería Aquí Me Voy, un espacio donde elaboramos
-                                diariamente panes de dulce y de sal, tortas húmedas y deliciosas tartas.
-                                Nuestro compromiso es ofrecer productos frescos, preparados con ingredientes
-                                de calidad y recetas tradicionales que brindan una experiencia única a nuestros clientes.
-                            </p>
-                        </article>
-                        <a href="#productos" class="btn btn-warning btn-lg px-4 me-2 fw-semibold text-dark">Ver Productos</a>
-                        <a href="#contacto" class="btn btn-outline-light btn-lg px-4 fw-semibold">Contáctanos</a>
-                    </div>
-                    <div class="col-md-5 text-center mt-4 mt-md-0">
-                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800" alt="Pan artesanal recién horneado" class="img-fluid rounded-3 shadow-lg">
-                    </div>
-                </div>
+                <h1 class="display-4 fw-bold mb-3">Panadería Aquí Me Voy</h1>
+                <p class="lead text-warning">El sabor tradicional en cada bocado.</p>
             </div>
         </section>
 
-        <div class="container my-5 py-2">
-            <div class="row">
-                
-                <div class="col-lg-8">
-                    
-                    <section id="quienes-somos" class="mb-5 pb-3">
-                        <h2 class="fw-bold text-start mb-4 pb-2 border-bottom" style="color: var(--primary-color);">Quiénes Somos</h2>
-                        <div class="row align-items-center">
-                            <div class="col-md-12">
-                                <p class="lh-base text-justify">
-                                    Panadería Aquí Me Voy es un emprendimiento familiar dedicado a la elaboración
-                                    artesanal de productos de panadería y pastelería. Nació con el propósito de
-                                    ofrecer a la comunidad panes frescos y postres elaborados con dedicación y
-                                    altos estándares de calidad.
-                                </p>
-                                <p class="lh-base text-justify">
-                                    Cada día trabajamos para conservar el sabor tradicional que caracteriza a
-                                    nuestros productos, utilizando ingredientes seleccionados y procesos de
-                                    elaboración que garantizan frescura y excelente presentación.
-                                </p>
-                                <p class="lh-base text-justify">
-                                    Nuestro catálogo incluye panes de dulce y de sal, tortas húmedas, tartas y
-                                    productos personalizados para diferentes ocasiones. Además, buscamos brindar
-                                    una atención cercana y amable, creando una experiencia agradable para nuestros
-                                    clientes y fortaleciendo la confianza en nuestro emprendimiento.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
+        <section id="contacto" class="container my-5">
+            <h2 class="fw-bold mb-4">Registra tu Pedido Especial</h2>
+            
+            <div id="mensajeAlerta" class="mb-3"></div>
 
-                    <section id="productos" class="mb-5 pb-3">
-                        <h2 class="fw-bold mb-4 pb-2 border-bottom" style="color: var(--primary-color);">Nuestros Productos</h2>
-                        <div class="row g-4">
-                            <div class="col-md-6 col-xl-4">
-                                <div class="card h-100 card-custom">
-                                    <div class="card-body p-4 text-center">
-                                        <div class="fs-1 mb-2">🍩</div>
-                                        <h5 class="card-title fw-bold">Panes de Dulce</h5>
-                                        <p class="card-text text-muted small">Deliciosas opciones tradicionales perfectas para acompañar tu café matutino o de la tarde.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-xl-4">
-                                <div class="card h-100 card-custom">
-                                    <div class="card-body p-4 text-center">
-                                        <div class="fs-1 mb-2">🥖</div>
-                                        <h5 class="card-title fw-bold">Panes de Sal</h5>
-                                        <p class="card-text text-muted small">Crujientes, calentitos y elaborados diariamente con la mejor harina y procesos artesanales.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-xl-4">
-                                <div class="card h-100 card-custom">
-                                    <div class="card-body p-4 text-center">
-                                        <div class="fs-1 mb-2">🍰</div>
-                                        <h5 class="card-title fw-bold">Tortas Húmedas</h5>
-                                        <p class="card-text text-muted small">Nuestra especialidad de la casa. Esponjosas, con un toque ideal de humedad y sabor.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-xl-6">
-                                <div class="card h-100 card-custom">
-                                    <div class="card-body p-4 text-center">
-                                        <div class="fs-1 mb-2">🥧</div>
-                                        <h5 class="card-title fw-bold">Tartas de Frutas</h5>
-                                        <p class="card-text text-muted small">Tartas frescas rellenas con las mejores frutas de la temporada sobre bases crujientes.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-xl-6">
-                                <div class="card h-100 card-custom">
-                                    <div class="card-body p-4 text-center">
-                                        <div class="fs-1 mb-2">🎂</div>
-                                        <h5 class="card-title fw-bold">Postres Personalizados</h5>
-                                        <p class="card-text text-muted small">Diseñamos y preparamos tortas y postres a medida para tus cumpleaños y eventos especiales.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section id="contacto" class="mb-5">
-                        <h2 class="fw-bold mb-4 pb-2 border-bottom" style="color: var(--primary-color);">Pedidos y Contacto</h2>
-                        
-                        <div class="row g-4 mb-4">
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 bg-light rounded-3 shadow-sm h-100">
-                                    <p class="mb-1 fw-bold">📧 Correo</p>
-                                    <p class="small text-break mb-0">contacto@panaderiaaquimevoy.com</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 bg-light rounded-3 shadow-sm h-100">
-                                    <p class="mb-1 fw-bold">📞 Teléfono</p>
-                                    <p class="small mb-0">0969741893</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 bg-light rounded-3 shadow-sm h-100">
-                                    <p class="mb-1 fw-bold">📍 Dirección</p>
-                                    <p class="small mb-0">Quito, Ecuador</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="mensajeAlerta" class="mb-3"></div>
-
-                        <div class="card card-custom p-4">
-                            <h4 class="mb-3 fw-bold h5 text-secondary">Registra tu Pedido Especial</h4>
-                            <form id="formPedido" novalidate>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="nombreCliente" class="form-label fw-medium">Nombre del Cliente *</label>
-                                        <input type="text" class="form-control" id="nombreCliente" placeholder="Tu nombre completo">
-                                        <div class="invalid-feedback">
-                                            El nombre es requerido y debe tener un mínimo de 5 letras.
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="tipoProducto" class="form-label fw-medium">Tipo de Producto *</label>
-                                        <select class="form-select" id="tipoProducto">
-                                            <option value="">Seleccione una opción...</option>
-                                            <option value="Panes de Dulce">Panes de Dulce 🍩</option>
-                                            <option value="Panes de Sal">Panes de Sal 🥖</option>
-                                            <option value="Tortas Húmedas">Tortas Húmedas 🍰</option>
-                                            <option value="Tartas de Frutas">Tartas de Frutas 🥧</option>
-                                            <option value="Postres Personalizados">Postres Personalizados 🎂</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Por favor, elija un tipo de producto de la lista.
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <label for="detallesPedido" class="form-label fw-medium">Detalles o Descripción del Pedido *</label>
-                                        <textarea class="form-control" id="detallesPedido" rows="4" placeholder="Especifica sabores, cantidades o decoraciones... Mínimo 15 caracteres."></textarea>
-                                        <div class="invalid-feedback">
-                                            Debes ingresar una descripción detallada (mínimo 15 caracteres).
-                                        </div>
-                                    </div>
-                                    <div class="col-12 text-end">
-                                        <button type="submit" class="btn btn-warning px-4 fw-semibold text-dark">Registrar Pedido</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="mt-4">
-                            <div class="alert alert-info d-flex justify-content-between align-items-center shadow-sm">
-                                <span>📋 Listado de Pedidos Registrados</span>
-                                <span>Total de registros: <span id="totalRegistros" class="fw-bold fs-5 text-primary">0</span></span>
-                            </div>
-                            <div id="listaRegistros" class="row g-3">
-                                </div>
-                        </div>
-                    </section>
-
-                    <section class="mb-5">
-                        <h2 class="fw-bold mb-4 pb-2 border-bottom" style="color: var(--primary-color);">Video de Referencia</h2>
-                        <div class="alert alert-warning text-center mb-3 p-2 small" role="alert">
-                            ¿No carga el reproductor integrado? 
-                            <a href="https://youtu.be/_om7--IxCIY" target="_blank" class="fw-bold text-dark text-decoration-underline">
-                                Haz clic aquí para ver el video directamente en YouTube ↗
-                            </a>
-                        </div>
-                        <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/_om7--IxCIY" title="Proceso de elaboración cinematográfico del pan" allowfullscreen></iframe>
-                        </div>
-                    </section>
-
-                </div> 
-                
-                <aside class="col-lg-4">
-                    <div class="aside-panel p-4 shadow-sm sticky-top" style="top: 85px; z-index: 10;">
-                        <h3 class="fw-bold h4 mb-3" style="color: var(--primary-color);">Información adicional</h3>
-                        <p class="mb-1 fw-bold text-dark">📅 Horario de atención:</p>
-                        <p class="text-muted small mb-4">Lunes a sábado de 06:00 a 20:00.</p>
-                        <div class="p-3 rounded-3 bg-white border border-warning shadow-sm">
-                            <p class="mb-1 fw-bold text-danger">✨ Promoción especial:</p>
-                            <p class="small mb-0 text-dark">Compra una torta húmeda y recibe un 10 % de descuento en tu próxima compra.</p>
-                        </div>
+            <form id="formPedido" class="card card-custom p-4" novalidate>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre del Cliente *</label>
+                        <input type="text" class="form-control" id="nombreCliente">
                     </div>
-                </aside>
+                    <div class="col-md-6">
+                        <label class="form-label">Tipo de Producto *</label>
+                        <select class="form-select" id="tipoProducto">
+                            <option value="">Seleccione...</option>
+                            <option value="Panes de Dulce">Panes de Dulce 🍩</option>
+                            <option value="Tortas Húmedas">Tortas Húmedas 🍰</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Detalles *</label>
+                        <textarea class="form-control" id="detallesPedido" rows="3"></textarea>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-warning">Registrar Pedido</button>
+                    </div>
+                </div>
+            </form>
 
+            <div class="mt-4">
+                <div class="alert alert-info d-flex justify-content-between">
+                    <span>📋 Listado de Pedidos</span>
+                    <span>Total: <span id="totalRegistros" class="fw-bold">0</span></span>
+                </div>
+                <!-- CONTENIDO DINÁMICO RENDERIZADO POR JS -->
+                <div id="listaRegistros" class="row g-3"></div>
             </div>
-        </div>
+        </section>
     </main>
+    <!-- FIN: BLOQUE CONTENIDO PRINCIPAL -->
 
+    <!-- INICIO: BLOQUE FOOTER (Posteriormente footer.html) -->
     <footer class="bg-dark text-white pt-4 pb-3 mt-5">
-        <div class="container text-center text-md-start">
-            <div class="row align-items-center">
-                <div class="col-md-7 mb-3 mb-md-0">
-                    <p class="mb-0 small text-muted">
-                        Elaborado por: <strong>Diana Susana Palma Cedeño</strong> | 
-                        Asignatura: <strong>Desarrollo de Aplicaciones Web</strong> | 
-                        Año: 2026
-                    </p>
-                </div>
-                <div class="col-md-5 text-center text-md-end">
-                    <a href="https://www.facebook.com/" target="_blank" class="btn btn-sm btn-primary me-2 fw-medium">Facebook</a>
-                    <a href="https://www.instagram.com/" target="_blank" class="btn btn-sm btn-danger me-2 fw-medium">Instagram</a>
-                    <a href="https://www.whatsapp.com/" target="_blank" class="btn btn-sm btn-success fw-medium">WhatsApp</a>
-                </div>
-            </div>
+        <div class="container text-center">
+            <p>Elaborado por: <strong>Diana Susana Palma Cedeño</strong> | 2026</p>
         </div>
     </footer>
+    <!-- FIN: BLOQUE FOOTER -->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
-
 </html>
