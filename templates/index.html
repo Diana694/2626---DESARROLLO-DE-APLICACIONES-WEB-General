@@ -1,5 +1,40 @@
 {% extends "base.html" %}
+
 {% block content %}
-    <h1>Bienvenido al Sistema</h1>
-    <p>Selecciona una opción del menú para gestionar tu panadería.</p>
+    <!-- Banner Principal con Imagen de Fondo -->
+    <div class="p-5 mb-4 rounded-3 text-white position-relative overflow-hidden" 
+         style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200') center/cover no-repeat; min-height: 250px;">
+        <div class="container-fluid py-3">
+            <h1 class="display-5 fw-bold text-warning">{{ mensaje }}</h1>
+            <p class="col-md-8 fs-5">Panadería "Aquí Me Voy" - Control general del negocio.</p>
+        </div>
+    </div>
+
+    <!-- Tarjetas de Resumen Dinámico -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3 shadow-sm">
+                <div class="card-header fw-bold">Ventas del Día</div>
+                <div class="card-body">
+                    <h3 class="card-title">${{ resumen.ventas_totales }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3 shadow-sm">
+                <div class="card-header fw-bold text-dark">Pedidos Pendientes</div>
+                <div class="card-body text-dark">
+                    <h3 class="card-title">{{ resumen.pedidos_pendientes }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3 shadow-sm">
+                <div class="card-header fw-bold">Alertas de Stock</div>
+                <div class="card-body">
+                    <h3 class="card-title">{{ resumen.productos_bajo_stock }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
