@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Panadería Aquí Me Voy{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="p-4 mb-4 bg-white rounded-3 shadow-sm border">
+        <h1 class="display-6 fw-bold text-dark">Panel de Control (Dashboard)</h1>
+        <p class="col-md-8 fs-5 text-muted">
+            Bienvenido, <strong class="text-warning">{{ current_user.usuario }}</strong>. Has iniciado sesión correctamente.
+        </p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Gestión de Productos</h5>
+                    <p class="card-text">Consulta, agrega, edita o elimina productos del inventario.</p>
+                    <a href="{{ url_for('productos') }}" class="btn btn-light btn-sm text-primary fw-bold">Ir a Productos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Clientes</h5>
+                    <p class="card-text">Administra el registro de clientes frecuentes u ocasionales.</p>
+                    <a href="{{ url_for('clientes') }}" class="btn btn-light btn-sm text-success fw-bold">Ir a Clientes</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-warning text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Facturación</h5>
+                    <p class="card-text">Genera y revisa las facturas registradas en el sistema.</p>
+                    <a href="{{ url_for('facturacion') }}" class="btn btn-dark btn-sm fw-bold">Ir a Facturación</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

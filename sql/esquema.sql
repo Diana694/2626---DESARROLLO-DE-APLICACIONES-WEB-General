@@ -30,3 +30,8 @@ INSERT INTO productos (nombre, precio, stock, id_proveedor) VALUES
 ('Croissant de Queso', 0.80, 10, 2),
 ('Empanada de Carne', 1.00, 20, 1),
 ('Pan Baguette', 1.25, 0, 1);
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);

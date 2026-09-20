@@ -1,15 +1,38 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from conexion.conexion import obtener_conexion
+from models import Usuario
+from forms.login_form import LoginForm
+from forms.usuario_form import RegistroForm
 from forms.producto_form import ProductoForm
 from forms.cliente_form import ClienteForm
 from forms.proveedor_form import ProveedorForm
 from forms.facturacion_form import FacturacionForm
 
 app = Flask(__name__)
-# SECRET_KEY obligatoria para protección CSRF
 app.config['SECRET_KEY'] = 'panaderia_aqui_me_voy_secret_key_2026'
 
-# --- DATOS EN MEMORIA PARA MÓDULOS SECUNDARIOS ---
+# --- CONFIGURACIÓN DE FLASK-LOGIN ---
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message = 'Por favor inicia sesión para acceder a esta página.'
+login_manager.login_message_category = 'warning'
+
+@login_manager.user_loader
+def load_user(user_id):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM usuarios WHERE id = %s", (user_id,))
+    user_data = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    if user_data:
+        return Usuario(id=user_data['id'], usuario=user_data['usuario'], password=user_data['password'])
+    return None
+
+# --- DATOS EN MEMORIA ---
 lista_clientes = [
     {"nombre": "Juan Pérez", "telefono": "0991234567", "tipo": "Frecuente"},
     {"nombre": "María Gómez", "telefono": "0987654321", "tipo": "Ocasional"}
@@ -23,12 +46,84 @@ lista_proveedores = [
 lista_facturas = []
 
 
-# --- PÁGINA PRINCIPAL ---
+# --- RUTAS DE AUTENTICACIÓN ---
+
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+        
+    form = RegistroForm()
+    if form.validate_on_submit():
+        usuario_val = form.usuario.data
+        hashed_password = generate_password_hash(form.password.data)
+        
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+        try:
+            cursor.execute("INSERT INTO usuarios (usuario, password) VALUES (%s, %s)", (usuario_val, hashed_password))
+            conexion.commit()
+            flash('Usuario registrado exitosamente. Ya puedes iniciar sesión.', 'success')
+            return redirect(url_for('login'))
+        except Exception:
+            conexion.rollback()
+            flash('El nombre de usuario ya existe. Elige otro.', 'danger')
+        finally:
+            cursor.close()
+            conexion.close()
+            
+    return render_template('registro.html', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+        
+    form = LoginForm()
+    if form.validate_on_submit():
+        usuario_val = form.usuario.data
+        password_val = form.password.data
+        
+        conexion = obtener_conexion()
+        cursor = conexion.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM usuarios WHERE usuario = %s", (usuario_val,))
+        user_data = cursor.fetchone()
+        cursor.close()
+        conexion.close()
+        
+        if user_data and check_password_hash(user_data['password'], password_val):
+            user_obj = Usuario(id=user_data['id'], usuario=user_data['usuario'], password=user_data['password'])
+            login_user(user_obj)
+            flash(f'¡Bienvenido, {user_obj.usuario}!', 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Usuario o contraseña incorrectos.', 'danger')
+            
+    return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Has cerrado sesión correctamente.', 'info')
+    return redirect(url_for('login'))
+
+
+# --- RUTAS PROTEGIDAS ---
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
+
+
 @app.route("/")
+@login_required
 def home():
     mensaje_bienvenida = "Bienvenido al Sistema de Gestión"
     
-    # Consultamos stock bajo directamente desde MySQL
     conexion = obtener_conexion()
     cursor = conexion.cursor(dictionary=True)
     cursor.execute('SELECT stock FROM productos')
@@ -44,10 +139,8 @@ def home():
     return render_template("index.html", mensaje=mensaje_bienvenida, resumen=resumen_dia)
 
 
-# --- PRODUCTOS (PERSISTENCIA CON MYSQL - CRUD COMPLETO) ---
-
-# 1. LISTAR (SELECT con JOIN)
 @app.route("/productos")
+@login_required
 def productos():
     conexion = obtener_conexion()
     cursor = conexion.cursor(dictionary=True)
@@ -64,12 +157,11 @@ def productos():
     return render_template("productos.html", productos=lista_productos)
 
 
-# 2. AGREGAR (INSERT INTO)
 @app.route("/productos/nuevo", methods=["GET", "POST"])
+@login_required
 def formulario_producto():
     form = ProductoForm()
     
-    # Cargar los proveedores disponibles en el desplegable
     conexion = obtener_conexion()
     cursor = conexion.cursor(dictionary=True)
     cursor.execute("SELECT id_proveedor, nombre FROM proveedores")
@@ -85,11 +177,9 @@ def formulario_producto():
         precio_val = float(form.precio.data)
         stock_val = form.stock.data
         
-        # Obtener el proveedor si existe en tu formulario, de lo contrario tomar el primero
         id_proveedor_val = getattr(form, 'id_proveedor', None)
         id_prov = id_proveedor_val.data if id_proveedor_val else (proveedores_db[0]['id_proveedor'] if proveedores_db else None)
 
-        # INSERT parametrizado
         conexion = obtener_conexion()
         cursor = conexion.cursor()
         query = "INSERT INTO productos (nombre, precio, stock, id_proveedor) VALUES (%s, %s, %s, %s)"
@@ -103,8 +193,8 @@ def formulario_producto():
     return render_template("formulario_producto.html", form=form)
 
 
-# 3. MODIFICAR (UPDATE ... WHERE)
 @app.route("/productos/editar/<int:id>", methods=["GET", "POST"])
+@login_required
 def editar_producto(id):
     conexion = obtener_conexion()
     cursor = conexion.cursor(dictionary=True)
@@ -131,8 +221,8 @@ def editar_producto(id):
     return render_template("formulario_producto.html", form=form, titulo="Editar Producto")
 
 
-# 4. ELIMINAR (DELETE FROM ... WHERE)
 @app.route("/productos/eliminar/<int:id>", methods=["POST"])
+@login_required
 def eliminar_producto(id):
     conexion = obtener_conexion()
     cursor = conexion.cursor()
@@ -143,12 +233,14 @@ def eliminar_producto(id):
     return redirect(url_for("productos"))
 
 
-# --- CLIENTES ---
 @app.route("/clientes")
+@login_required
 def clientes():
     return render_template("clientes.html", clientes=lista_clientes)
 
+
 @app.route("/clientes/nuevo", methods=["GET", "POST"])
+@login_required
 def formulario_cliente():
     form = ClienteForm()
     if form.validate_on_submit():
@@ -161,12 +253,14 @@ def formulario_cliente():
     return render_template("formulario_cliente.html", form=form)
 
 
-# --- PROVEEDORES ---
 @app.route("/proveedores")
+@login_required
 def proveedores():
     return render_template("proveedores.html", proveedores=lista_proveedores)
 
+
 @app.route("/proveedores/nuevo", methods=["GET", "POST"])
+@login_required
 def formulario_proveedor():
     form = ProveedorForm()
     if form.validate_on_submit():
@@ -179,16 +273,17 @@ def formulario_proveedor():
     return render_template("formulario_proveedor.html", form=form)
 
 
-# --- FACTURACIÓN ---
 @app.route("/facturacion")
+@login_required
 def facturacion():
     return render_template("facturacion.html", facturas=lista_facturas)
 
+
 @app.route("/facturacion/nueva", methods=["GET", "POST"])
+@login_required
 def formulario_facturacion():
     form = FacturacionForm()
     
-    # Consultamos los productos almacenados en MySQL para llenar el Select dinámico
     conexion = obtener_conexion()
     cursor = conexion.cursor(dictionary=True)
     cursor.execute('SELECT nombre FROM productos')
