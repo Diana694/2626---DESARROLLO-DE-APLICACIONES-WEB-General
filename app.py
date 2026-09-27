@@ -15,6 +15,53 @@ from forms.facturacion_form import FacturacionForm
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'panaderia_aqui_me_voy_secret_key_2026')
 
+# --- CREACIÓN AUTOMÁTICA DE TABLAS EN POSTGRESQL ---
+def crear_tablas_iniciales():
+    conexion = obtener_conexion()
+    if conexion:
+        try:
+            cursor = conexion.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS proveedores (
+                    id_proveedor SERIAL PRIMARY KEY,
+                    nombre VARCHAR(100) NOT NULL,
+                    telefono VARCHAR(20),
+                    correo VARCHAR(100)
+                );
+
+                CREATE TABLE IF NOT EXISTS usuarios (
+                    id SERIAL PRIMARY KEY,
+                    usuario VARCHAR(50) UNIQUE NOT NULL,
+                    password VARCHAR(255) NOT NULL
+                );
+
+                CREATE TABLE IF NOT EXISTS productos (
+                    id_producto SERIAL PRIMARY KEY,
+                    nombre VARCHAR(100) NOT NULL,
+                    precio NUMERIC(10, 2) NOT NULL,
+                    stock INT NOT NULL,
+                    id_proveedor INT,
+                    usuario_id INT,
+                    FOREIGN KEY (id_proveedor) REFERENCES proveedores(id_proveedor) ON DELETE SET NULL,
+                    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+                );
+
+                INSERT INTO proveedores (nombre, telefono, correo) VALUES 
+                ('Harinas del Ecuador', '022345678', 'contacto@harinas.com'),
+                ('Lácteos El Campo', '022876543', 'ventas@lacteos.com')
+                ON CONFLICT DO NOTHING;
+            """)
+            conexion.commit()
+            cursor.close()
+            conexion.close()
+            print("Tablas verificadas y creadas correctamente en PostgreSQL.")
+        except Exception as e:
+            print(f"Error al inicializar tablas: {e}")
+
+# Ejecutar la creación de tablas al iniciar
+with app.app_context():
+    crear_tablas_iniciales()
+
 # --- CONFIGURACIÓN DE FLASK-LOGIN ---
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
